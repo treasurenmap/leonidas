@@ -1,3 +1,15 @@
+# Issues 
+
+When building this project, I ran into several issues:
+1. In the buildspec.yml file, line 20 (poetry run python generator.py validate) resulted in the following error: ImportError: cannot import name 'soft_unicode' from 'markupsafe' (/root/.cache/pypoetry/virtualenvs/generator-5SpHchWn-py3.7/lib/python3.7/site-packages/markupsafe/__init__.py)
+    a. Fix to the above issue was a virtual Python environment with dependencies installed within
+2. Next issue was CloudFormation permissions with the error: User: arn:aws:sts::1234567890:assumed-role/codebuildrole/AWSCodeBuild-27721881874ETC is not authorized to perform: cloudformation:CreateChangeSet on resource: arn:aws:cloudformation:us-east-1:1234567890:stack/leonidas-dev/* because no identity-based policy allows the cloudformation:CreateChangeSet action
+    a. Attempts to attach inline policies specifically for cloudformation:CreateChangeSet didn't work.  Temporary workaround is provide full admin access to CloudFormation, CodeBuild, and CodeCommit.
+3. Final issue was a result of the command run on line 29 of buildspec.yml (serverless deploy --conceal), result was: [Container] 2022/03/15 16:02:05 Phase context status code: COMMAND_EXECUTION_ERROR Message: Error while executing command: serverless deploy --conceal. Reason: exit status 1
+    a. This appears to be a result of a lack of serverless.yml file.  In the /generator/templates/ directory there is a serverless.jinja2 file.  I simply renamed that file  serverless.yml and placed a copy into the /templates/ and /generator/ directories.
+
+**After doing all these, the build was successful.  More updates will come with additional troubleshooting.**
+
 # Leonidas
 
 This is the repository containing Leonidas, a framework for executing attacker actions in the cloud. It provides a YAML-based format for defining cloud attacker tactics, techniques and procedures (TTPs) and their associated detection properties. These definitions can then be compiled into:
