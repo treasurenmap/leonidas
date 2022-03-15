@@ -16,6 +16,11 @@ phases:
       - poetry install
   pre_build:
     commands:
+      - virtualenv -p python3 Py3LEONIDAS
+      - . Py3LEONIDAS/bin/activate
+      - pip install Jinja2
+      - pip install pyyaml
+      - pip install typer
       - python -m unittest discover test
       - poetry run python generator.py validate
       - poetry run python generator.py generate-aws-api
